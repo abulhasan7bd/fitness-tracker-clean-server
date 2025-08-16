@@ -19,9 +19,9 @@ const corsOptions = {
   // change here 
   //  http://localhost:5000
   // origin: "http://localhost:5000",
-  origin: "http://localhost:5173",
+  // origin: "http://localhost:5173",
   // http://localhost:5173/
-  // origin: "https://assignmet-12-5e8a8.web.app",
+  origin: "https://assignmet-12-5e8a8.web.app",
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -238,7 +238,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/classes",verifyToken, async (req, res) => {
+    app.get("/classes", async (req, res) => {
       const result = await classesCollection
         .find()
         .sort({ totalBookings: -1 })
