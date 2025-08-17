@@ -16,12 +16,12 @@ admin.initializeApp({
 
 // MIDDLEWARE
 const corsOptions = {
-  // change here 
+  // change here
   //  http://localhost:5000
   // origin: "http://localhost:5000",
-  // origin: "http://localhost:5173",
+  origin: "http://localhost:5173",
   // http://localhost:5173/
-  origin: "https://assignmet-12-5e8a8.web.app",
+  // origin: "https://assignmet-12-5e8a8.web.app",
   credentials: true,
 };
 app.use(cors(corsOptions));
@@ -84,8 +84,6 @@ async function run() {
         });
       }
     };
-
-   
 
     // PATCH /api/single-trainer/:id
     app.patch("/api/single-trainer/:id", async (req, res) => {
@@ -408,7 +406,16 @@ async function run() {
         const pendingTrainers = await beAtrainerCollection
           .find(query)
           .toArray();
-        res.send(pendingTrainers);
+
+        const trainersWithPrice = pendingTrainers.map((trainer) => {
+          const randomPrice =
+            Math.floor(Math.random() * (1000 - 500 + 1)) + 500;
+          return {
+            ...trainer,
+            price: randomPrice,
+          };
+        });
+        res.send(trainersWithPrice);
       } catch (error) {
         console.error("Failed to fetch pending trainers:", error);
         res.status(500).send({ error: "Internal server error" });
@@ -545,7 +552,7 @@ async function run() {
       }
     });
     // Save payment history on the database
-    app.post("/payment",verifyToken, async (req, res) => {
+    app.post("/payment", verifyToken, async (req, res) => {
       try {
         const { targetId, ...payment } = req.body;
         console.log("targetId", targetId);
